@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<install type="module" version="1.5">
+	<name>JEA emphasis V1.0</name>
+	<author>Sylvain Philip</author>
+	<creationDate>mars 2008</creationDate>
+	<copyright>(C) 2008 PHILIP Sylvain. All rights reserved.</copyright>
+	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+	<authorEmail>contact@sphilip.com</authorEmail>
+	<authorUrl>www.sphilip.com</authorUrl>
+	<version>1.0</version>
+	<description>DESCJEAEMPHASISMOD</description>
+	<files>
+		<filename module="mod_jea_emphasis">mod_jea_emphasis.php</filename>
+		<filename module="mod_jea_emphasis">helper.php</filename>
+		<filename module="mod_jea_emphasis">mod_jea_emphasis.css</filename>
+		<filename module="mod_jea_emphasis">tmpl/default.php</filename>
+	</files>
+	
+	<languages folder="languages">
+		<language tag="fr-FR">fr-FR.mod_jea_emphasis.ini</language>
+	</languages>
+	
+	<params>
+		<param name="display_thumbnails" type="radio" default="1" label="Display thumbnails" description="PARAMUDISPLAYTHUMBNAILS">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+		<param name="display_details" type="radio" default="1" label="Display details" description="PARAMUDISPLAYDETAILS">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+		<param name="order_by" type="list" default="ordering" label="Order by" description="PARAMORDERBY">
+			<option value="ordering">Order</option>
+			<option value="date_insert">Date</option>
+			<option value="price">Price</option>
+		</param>
+		<param name="number_to_display" type="text" default="5" label="Number to display" description="PARAMNUMBERTODISPLAY" />
+	</params>
+	
+</install>
