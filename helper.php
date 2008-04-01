@@ -40,7 +40,7 @@ class modJeaEmphasisHelper
 	{
 		$orderby = $params->get('order_by', '');
 
-		$fields .= 'tp.id, tp.ref, tp.is_renting ,tp.price AS PRICE, tp.living_space, tp.land_space, tp.advantages, '
+		$fields = 'tp.id, tp.ref, tp.is_renting ,tp.price AS price, tp.living_space, tp.land_space, tp.advantages, '
 		        .  'tp.ordering AS ordering, td.value AS `department`, ts.value AS `slogan`, tt.value AS `type`, '
 		        .  'tto.value AS `town`, tp.date_insert AS date_insert' ;
 
