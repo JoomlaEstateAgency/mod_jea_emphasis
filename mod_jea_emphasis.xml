@@ -33,6 +33,7 @@
 			<option value="ordering">Order</option>
 			<option value="date_insert">Date</option>
 			<option value="price">Price</option>
+			<option value="rand()">Random</option>
 		</param>
 		<param name="number_to_display" type="text" default="5" label="Number to display" description="PARAMNUMBERTODISPLAY" />
 	</params>
