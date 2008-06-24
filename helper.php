@@ -26,18 +26,11 @@ class modJeaEmphasisHelper
 				
 			$instance =& JComponentHelper::getParams('com_jea');
 			
-			//Sets a default values if not already assigned
-			
-			// fix bug #10973] Warning: cannot yet handle MBCS in html_entity_decode()!
-			if( (int) PHP_VERSION < 5){	    	
-		    	$surface_measure = html_entity_decode( 'm&sup2;', ENT_COMPAT, 'UTF-8' );
-		    	$currency_symbol = html_entity_decode( '&euro;', ENT_COMPAT, 'UTF-8' ) ;
-		    	$thousands_separator = html_entity_decode( '&nbsp;', ENT_COMPAT, 'UTF-8' );
-		    } else {
-		    	$surface_measure = utf8_encode(html_entity_decode( 'm&sup2;', ENT_COMPAT, 'ISO-8859-15' ));
-		    	$currency_symbol = utf8_encode(html_entity_decode( '&euro;', ENT_COMPAT, 'ISO-8859-15' )) ;
-		    	$thousands_separator = utf8_encode(html_entity_decode( '&nbsp;', ENT_COMPAT, 'ISO-8859-15' ));
-		    }
+		    // fix bug #10973 Warning: cannot yet handle MBCS in html_entity_decode()!	
+		    $surface_measure = 'm' . JText::_('SYMBOL_SUP2');
+		    $currency_symbol = JText::_('SYMBOL_EURO');
+		    $thousands_separator = ' ';
+		    // end fix bug #10973
 			
 			$instance->def('surface_measure', $surface_measure);
 			$instance->def('currency_symbol', $currency_symbol);
@@ -89,9 +82,9 @@ class modJeaEmphasisHelper
 	
 	function getItemImg( $id=0 )
 	{
-		if ( is_file( JPATH_ROOT.DS.'components'.DS.'com_jea'.DS.'upload'.DS.'properties'.DS.$id.DS.'min.jpg' ) ){
+		if ( is_file( JPATH_ROOT.DS.'images'.DS.'com_jea'.DS.'images'.DS.$id.DS.'min.jpg' ) ){
 			
-			return JURI::root().'components/com_jea/upload/properties/'.$id.'/min.jpg' ;
+			return JURI::root().'images/com_jea/images/'.$id.'/min.jpg' ;
 		}
 		
 		return false;
@@ -111,13 +104,22 @@ class modJeaEmphasisHelper
 			$symbol_place = modJeaEmphasisHelper::getComponentParam('symbol_place', 1);
 				
 			jimport('joomla.utilities.string');
-			$decimal_separator   = JString::transcode( $decimal_separator , $charset, 'ISO-8859-1' );
-			$thousands_separator = JString::transcode( $thousands_separator , $charset, 'ISO-8859-1' );
+			if (function_exists('iconv')) {
+				$decimal_separator   = JString::transcode( $decimal_separator , $charset, 'ISO-8859-1' );
+				$thousands_separator = JString::transcode( $thousands_separator , $charset, 'ISO-8859-1' );
+			} else {
+				$decimal_separator   = utf8_decode( $decimal_separator );
+				$thousands_separator = utf8_decode( $thousands_separator );
+			}
 
 			$price = number_format( $price, 0, $decimal_separator, $thousands_separator ) ;
 
 			//re-encode
-			$price = JString::transcode( $price, 'ISO-8859-1', $charset );
+			if (function_exists('iconv')) {
+				$price = JString::transcode( $price, 'ISO-8859-1', $charset );
+			} else {
+				$price = utf8_encode( $price );
+			}
 
 			//is currency symbol before or after price?
 			if ( $symbol_place == 1 ) {
