@@ -71,7 +71,7 @@ class modJeaEmphasisHelper
 	
 	function getComponentUrl ( $id=0 )
 	{
-		$url = 'index.php?option=com_jea&view=default&Itemid=' . JRequest::getInt('Itemid', 0 ) ;
+		$url = 'index.php?option=com_jea&view=properties&Itemid=' . JRequest::getInt('Itemid', 0 ) ;
 	  
 		if ( $id ) {
 			$url .= '&id=' . intval( $id ) ;
