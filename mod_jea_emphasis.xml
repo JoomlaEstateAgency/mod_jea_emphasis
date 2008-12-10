@@ -17,6 +17,7 @@
 	</files>
 	
 	<languages folder="languages">
+	    <language tag="en-GB">en-GB.mod_jea_emphasis.ini</language>
 		<language tag="fr-FR">fr-FR.mod_jea_emphasis.ini</language>
 	</languages>
 	
