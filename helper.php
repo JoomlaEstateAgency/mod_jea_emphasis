@@ -49,12 +49,15 @@ class modJeaEmphasisHelper
 		$fields = 'tp.id, tp.ref, tp.is_renting ,tp.price AS price, tp.living_space, tp.land_space, tp.advantages, '
 		        .  'tp.ordering AS ordering, td.value AS `department`, ts.value AS `slogan`, tt.value AS `type`, '
 		        .  'tto.value AS `town`, tp.date_insert AS date_insert' ;
+		//Joomfish compatibility:
+		$fields .= ', td.id AS `id2`, ts.id AS `id3`, tt.id AS `id4`, tto.id AS `id5` ' ; 
 
 		$select = 'SELECT ' . $fields .' FROM #__jea_properties AS tp'. PHP_EOL 
 		        . 'LEFT JOIN #__jea_departments AS td ON td.id = tp.department_id'. PHP_EOL
 		        . 'LEFT JOIN #__jea_slogans AS ts ON ts.id = tp.slogan_id'. PHP_EOL
 		        . 'LEFT JOIN #__jea_types AS tt ON tt.id = tp.type_id'. PHP_EOL
 		        . 'LEFT JOIN #__jea_towns AS tto ON tto.id = tp.town_id'. PHP_EOL ;
+		
 		        
 		$sql = $select .' WHERE tp.emphasis=1 AND tp.published=1 ORDER BY '. $orderby ;
 
