@@ -2,6 +2,8 @@
 defined('_JEXEC') or die('Restricted access');
 
 JHTML::stylesheet('mod_jea_emphasis.css', 'modules/mod_jea_emphasis/');
+$document=& JFactory::getDocument();
+$charset = strtoupper($document->getCharset());
 ?>
 
 <?php foreach ($rows as $k => $row) :?>
@@ -9,7 +11,7 @@ JHTML::stylesheet('mod_jea_emphasis.css', 'modules/mod_jea_emphasis/');
 		<dt class="jea_mod_emphasis_title" >
 			<a href="<?php echo modJeaEmphasisHelper::getComponentUrl( $row->id ) ?>" title="<?php echo JText::_('Show detail') ?>" > 
 			<strong> 
-			<?php echo ucfirst( JText::sprintf('PROPERTY TYPE IN TOWN', htmlentities($row->type), htmlentities($row->town) ) ) ?>
+			<?php echo ucfirst( JText::sprintf('PROPERTY TYPE IN TOWN', htmlentities($row->type, ENT_COMPAT, $charset), htmlentities($row->town, ENT_COMPAT, $charset) ) ) ?>
 			</strong> 
 			( <?php echo JText::_('Ref' ) . ' : ' . $row->ref ?> )
 			</a>
