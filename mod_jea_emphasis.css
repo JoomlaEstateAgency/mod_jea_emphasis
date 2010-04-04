@@ -20,7 +20,7 @@ dl.jea_mod_emphasis_item dt.jea_mod_emphasis_title strong {
 }
 
 dl.jea_mod_emphasis_item dt.image {
-	float: left;
+	/*float: left;*/
 	margin-right: 1em;
 }
 
@@ -28,8 +28,12 @@ dl.jea_mod_emphasis_item dt.image img {
 	border-color: #819d26;
 }
 
+dl.jea_mod_emphasis_item dd {
+	margin: 5px 0;
+}
+
 dl.jea_mod_emphasis_item span.slogan {
-	float: right;
+	/*float: right;*/
 }
 
 dl.jea_mod_emphasis_item span.slogan strong {

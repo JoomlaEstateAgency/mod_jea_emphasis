@@ -25,10 +25,16 @@ $charset = strtoupper($document->getCharset());
 	<dl class="jea_mod_emphasis_item" >
 		<dt class="jea_mod_emphasis_title" >
 			<a href="<?php echo modJeaEmphasisHelper::getComponentUrl( $row->id ) ?>" title="<?php echo JText::_('Show detail') ?>" > 
+			<?php if (empty($row->title)):?>
 			<strong> 
 			<?php echo ucfirst( JText::sprintf('PROPERTY TYPE IN TOWN', htmlentities($row->type, ENT_COMPAT, $charset), htmlentities($row->town, ENT_COMPAT, $charset) ) ) ?>
 			</strong> 
 			( <?php echo JText::_('Ref' ) . ' : ' . $row->ref ?> )
+			<?php else: ?>
+			<strong> 
+			<?php echo htmlentities($row->title, ENT_COMPAT, $charset) ?>
+			</strong> 
+			<?php endif ?>
 			</a>
 		</dt>
 	
