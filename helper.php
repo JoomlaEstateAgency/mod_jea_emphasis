@@ -59,7 +59,7 @@ class modJeaEmphasisHelper
 		        . 'LEFT JOIN #__jea_towns AS tto ON tto.id = tp.town_id'. PHP_EOL ;
 		
 		        
-		$sql = $select .' WHERE tp.emphasis=1 AND tp.published=1 ORDER BY '. $orderby ;
+		$sql = $select .' WHERE tp.emphasis=1 AND tp.published=1 ORDER BY '. $orderby . ' DESC' ;
 
 		$db =& JFactory::getDBO();
 		$db->setQuery($sql, 0, $params->get('number_to_display') );
