@@ -17,9 +17,13 @@ defined('_JEXEC') or die('Restricted access');
 
 require_once (dirname(__FILE__).DS.'helper.php');
 
-$params->set('surface_measure', modJeaEmphasisHelper::getComponentParam('surface_measure') );
+$params->set('surface_measure', modJeaEmphasisHelper::getComponentParam('surface_measure'));
 
-$rows = modJeaEmphasisHelper::getList($params);
+$application =& JFactory::getApplication();
+// Register params to be retrieved into modJeaEmphasisHelper
+$application->set('mod_jea_emphasis_params', $params);
+
+$rows = modJeaEmphasisHelper::getList();
 
 require(JModuleHelper::getLayoutPath('mod_jea_emphasis'));
 

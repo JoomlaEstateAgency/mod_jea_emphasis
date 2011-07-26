@@ -22,9 +22,9 @@ $charset = strtoupper($document->getCharset());
 ?>
 
 <?php foreach ($rows as $k => $row) :?>
-	<dl class="jea_mod_emphasis_item" >
+	<dl class="jea_mod_emphasis_item<?php echo $params->get('moduleclass_sfx') ?>" >
 		<dt class="jea_mod_emphasis_title" >
-			<a href="<?php echo modJeaEmphasisHelper::getComponentUrl( $row->id ) ?>" title="<?php echo JText::_('Show detail') ?>" > 
+			<a href="<?php echo modJeaEmphasisHelper::getComponentUrl( $row) ?>" title="<?php echo JText::_('Show detail') ?>" > 
 			<?php if (empty($row->title)):?>
 			<strong> 
 			<?php echo ucfirst( JText::sprintf('PROPERTY TYPE IN TOWN', htmlentities($row->type, ENT_COMPAT, $charset), htmlentities($row->town, ENT_COMPAT, $charset) ) ) ?>
@@ -40,7 +40,7 @@ $charset = strtoupper($document->getCharset());
 	
 		<?php if ( $params->get('display_thumbnails', 0) && $imgUrl = modJeaEmphasisHelper::getItemImg( $row->id ) ) : ?>
 		<dt class="image">
-		    <a href="<?php echo modJeaEmphasisHelper::getComponentUrl( $row->id ) ?>" title="<?php echo JText::_('Detail') ?>">
+		    <a href="<?php echo modJeaEmphasisHelper::getComponentUrl($row) ?>" title="<?php echo JText::_('Detail') ?>">
 		      <img src="<?php echo $imgUrl ?>" alt="<?php echo JText::_('Detail') ?>" />
 			</a>
 		</dt>

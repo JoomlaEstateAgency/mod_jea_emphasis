@@ -16,8 +16,8 @@ defined('_JEXEC') or die('Restricted access');
 
 class modJeaEmphasisHelper
 {
-
-	function getComponentParam($param, $default='')
+    
+    function getComponentParam($param, $default='')
 	{
 		static $instance;
 
@@ -42,9 +42,12 @@ class modJeaEmphasisHelper
 		return $instance->get($param, $default) ;
 	}
 
-	function getList($params)
+	function getList()
 	{
-		$orderby = $params->get('order_by', '');
+		$application =& JFactory::getApplication();
+	    $params = $application->get('mod_jea_emphasis_params');
+	    
+	    $orderby = $params->get('order_by', '');
 
 		$fields = 'tp.id, tp.ref, tp.title, tp.is_renting ,tp.price AS price, tp.living_space, tp.land_space, tp.advantages, '
 		        .  'tp.ordering AS ordering, td.value AS `department`, ts.value AS `slogan`, tt.value AS `type`, '
@@ -72,12 +75,27 @@ class modJeaEmphasisHelper
 		return $rows;
 	}
 	
-	function getComponentUrl ( $id=0 )
+	function getComponentUrl ($row)
 	{
-		$url = 'index.php?option=com_jea&view=properties&Itemid=' . JRequest::getInt('Itemid', 0 ) ;
+	    static $params;
+	    
+	    // Backward compatibility
+	    $id = is_object($row)? $row->id : $row ;
+	    
+	    if ($params === null) {
+    	    $application =& JFactory::getApplication();
+    	    $params = $application->get('mod_jea_emphasis_params');
+	    }
+	    
+	    $url = 'index.php?option=com_jea&view=properties' ;
 	  
 		if ( $id ) {
 			$url .= '&id=' . intval( $id ) ;
+		}
+		
+		if (is_object($row)) {
+		    $url .= $row->is_renting == 1 ? '&Itemid=' . $params->get('rentals_itemid', '0') : 
+		    						   '&Itemid=' . $params->get('sales_itemid', '0');
 		}
 	  
 		return JRoute::_( $url );
