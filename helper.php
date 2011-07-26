@@ -48,6 +48,7 @@ class modJeaEmphasisHelper
 	    $params = $application->get('mod_jea_emphasis_params');
 	    
 	    $orderby = $params->get('order_by', '');
+	    $selection = $params->get('selection', 'emphasis');
 
 		$fields = 'tp.id, tp.ref, tp.title, tp.is_renting ,tp.price AS price, tp.living_space, tp.land_space, tp.advantages, '
 		        .  'tp.ordering AS ordering, td.value AS `department`, ts.value AS `slogan`, tt.value AS `type`, '
@@ -61,8 +62,22 @@ class modJeaEmphasisHelper
 		        . 'LEFT JOIN #__jea_types AS tt ON tt.id = tp.type_id'. PHP_EOL
 		        . 'LEFT JOIN #__jea_towns AS tto ON tto.id = tp.town_id'. PHP_EOL ;
 		
+	    $where = ' WHERE tp.published ';
+		$selection = $params->get('selection', 'emphasis');
+		
+		switch($selection){
+		    case 'emphasis':
+		        $where .= 'AND tp.emphasis=1';
+		        break;
+		    case 'latest':
+		        $orderby = 'date_insert';
+		        break;
+		    case 'random':
+		        $orderby = 'RAND()';
+		        break;
+		}
 		        
-		$sql = $select .' WHERE tp.emphasis=1 AND tp.published=1 ORDER BY '. $orderby . ' DESC' ;
+		$sql = $select. ' ' . $where. ' ORDER BY '. $orderby . ' DESC' ;
 
 		$db =& JFactory::getDBO();
 		$db->setQuery($sql, 0, $params->get('number_to_display') );

@@ -22,6 +22,12 @@
 	</languages>
 	
 	<params>
+		<param name="selection" type="list" default="emphasis" label="Selection" description="PARAMSELECTION">
+			<option value="emphasis">Featured properties</option>
+			<option value="latest">Latest properties</option>
+			<option value="random">Random properties</option>
+		</param>
+	
 		<param name="display_thumbnails" type="radio" default="1" label="Display thumbnails" description="PARAMUDISPLAYTHUMBNAILS">
 			<option value="0">No</option>
 			<option value="1">Yes</option>
@@ -30,6 +36,7 @@
 			<option value="0">No</option>
 			<option value="1">Yes</option>
 		</param>
+		
 		<param name="order_by" type="list" default="ordering" label="Order by" description="PARAMORDERBY">
 			<option value="ordering">Order</option>
 			<option value="date_insert">Date</option>
