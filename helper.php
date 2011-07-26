@@ -162,7 +162,7 @@ class modJeaEmphasisHelper
 			}
 		}
 		
-		return implode(',', $temp);
+		return implode(', ', $temp);
 	}
 
 
