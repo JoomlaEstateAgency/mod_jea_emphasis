@@ -1,52 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<install type="module" version="1.5" method="upgrade">
-	<name>JEA emphasis V1.4</name>
+<extension type="module" version="2.5" method="upgrade">
+	<name>mod_jea_emphasis</name>
 	<author>Sylvain Philip</author>
-	<creationDate>mars 2008</creationDate>
-	<copyright>(C) 2008 PHILIP Sylvain. All rights reserved.</copyright>
+	<creationDate>04/2012</creationDate>
+	<copyright>(C) 2012 PHILIP Sylvain. All rights reserved.</copyright>
 	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
 	<authorEmail>contact@sphilip.com</authorEmail>
 	<authorUrl>www.sphilip.com</authorUrl>
-	<version>1.5</version>
-	<description>DESCJEAEMPHASISMOD</description>
+	<version>2.0</version>
+	<description>MOD_JEA_EMPHASIS_DESCRIPTION</description>
 	<files>
 		<filename module="mod_jea_emphasis">mod_jea_emphasis.php</filename>
-		<filename module="mod_jea_emphasis">helper.php</filename>
-		<filename module="mod_jea_emphasis">mod_jea_emphasis.css</filename>
-		<filename module="mod_jea_emphasis">tmpl/default.php</filename>
+		<folder>tmpl</folder>
+		<filename>helper.php</filename>
+		<filename>mod_jea_emphasis.css</filename>>
 	</files>
-	
+
 	<languages folder="languages">
-	    <language tag="en-GB">en-GB.mod_jea_emphasis.ini</language>
+		<language tag="en-GB">en-GB.mod_jea_emphasis.ini</language>
+		<language tag="en-GB">en-GB.mod_jea_emphasis.sys.ini</language>
 		<language tag="fr-FR">fr-FR.mod_jea_emphasis.ini</language>
+		<language tag="fr-FR">fr-FR.mod_jea_emphasis.sys.ini</language>
 	</languages>
-	
-	<params>
-		<param name="selection" type="list" default="emphasis" label="Selection" description="PARAMSELECTION">
-			<option value="emphasis">Featured properties</option>
-			<option value="latest">Latest properties</option>
-			<option value="random">Random properties</option>
-		</param>
-	
-		<param name="display_thumbnails" type="radio" default="1" label="Display thumbnails" description="PARAMUDISPLAYTHUMBNAILS">
-			<option value="0">No</option>
-			<option value="1">Yes</option>
-		</param>
-		<param name="display_details" type="radio" default="1" label="Display details" description="PARAMUDISPLAYDETAILS">
-			<option value="0">No</option>
-			<option value="1">Yes</option>
-		</param>
-		
-		<param name="order_by" type="list" default="ordering" label="Order by" description="PARAMORDERBY">
-			<option value="ordering">Order</option>
-			<option value="date_insert">Date</option>
-			<option value="price">Price</option>
-			<option value="rand()">Random</option>
-		</param>
-		<param name="number_to_display" type="text" default="5" label="Number to display" description="PARAMNUMBERTODISPLAY" />
-		<param name="sales_itemid" type="menuitem" default="" label="Sales menu Item" description="PARAMSALESMENUITEM"/>
-		<param name="rentals_itemid" type="menuitem" default="" label="Rentals menu Item" description="PARAMRENTALSMENUITEM"/>
-		<param name="moduleclass_sfx" type="text" default="" label="Module Class Suffix" description="PARAMMODULECLASSSUFFIX" />
-	</params>
-	
-</install>
+
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="selection" type="list" default="featured"
+					label="MOD_JEA_EMPHASIS_FIELD_SELECTION_LABEL" 
+					description="MOD_JEA_EMPHASIS_FIELD_SELECTION_DESC">
+					<option value="featured">MOD_JEA_EMPHASIS_OPTION_FEATURED_PROPERTIES</option>
+					<option value="latest">MOD_JEA_EMPHASIS_OPTION_LATEST_PROPERTIES</option>
+					<option value="random">MOD_JEA_EMPHASIS_OPTION_RANDOM_PROPERTIES</option>
+				</field>
+
+				<field name="show_thumbnails" type="radio" default="1"
+					label="MOD_JEA_EMPHASIS_FIELD_SHOW_THUMBNAILS_LABEL">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+
+				<field name="show_details" type="radio" default="1"
+					label="MOD_JEA_EMPHASIS_FIELD_SHOW_DETAILS_LABEL">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+
+				<field name="order_by" type="list" default="created"
+					label="MOD_JEA_EMPHASIS_FIELD_ORDER_BY_LABEL" 
+					description="MOD_JEA_EMPHASIS_FIELD_ORDER_BY_DESC">
+					<option value="created">JGLOBAL_FIELD_CREATED_LABEL</option>
+					<option value="ordering">JFIELD_ORDERING_LABEL</option>
+					<option value="price">MOD_JEA_EMPHASIS_PRICE</option>
+					<option value="hits">JGLOBAL_HITS</option>
+					<option value="random">MOD_JEA_EMPHASIS_OPTION_RANDOM</option>
+				</field>
+
+				<field name="number_items" type="text" default="5"
+					label="MOD_JEA_EMPHASIS_FIELD_NUMBER_ITEMS_LIST_LABEL" 
+					description="MOD_JEA_EMPHASIS_FIELD_NUMBER_ITEMS_LIST_DESC" />
+				
+				<field name="display_mode" type="list" default="vertical"
+					label="MOD_JEA_EMPHASIS_FIELD_DISPLAY_MODE_LABEL">
+					<option value="vertical">MOD_JEA_EMPHASIS_OPTION_VERTICAL</option>
+					<option value="horizontal">MOD_JEA_EMPHASIS_OPTION_HORIZONTAL</option>
+				</field>
+
+			</fieldset>
+
+			<fieldset name="advanced">>
+				<field name="moduleclass_sfx" type="text" default="" 
+					label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL" 
+					description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC" />
+			</fieldset>
+			>
+		</fields>
+	</config>
+</extension>

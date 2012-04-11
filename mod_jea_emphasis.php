@@ -1,29 +1,24 @@
 <?php
 /**
- * This file is part of Joomla Estate Agency - Joomla! extension for real estate agency
- * 
  * @version     $Id$
- * @package		Jea.module.emphasis
- * @copyright	Copyright (C) 2008 PHILIP Sylvain. All rights reserved.
- * @license		GNU/GPL, see LICENSE.txt
- * Joomla Estate Agency is free software. This version may have been modified pursuant to the
- * GNU General Public License, and as distributed it includes or is derivative
- * of works licensed under the GNU General Public License or other free or open
- * source software licenses.
- * 
+ * @package     Joomla.Site
+ * @subpackage  mod_jea_emphasiis
+ * @copyright   Copyright (C) 2012 PHILIP Sylvain. All rights reserved.
+ * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-defined('_JEXEC') or die('Restricted access');
+// no direct access
+defined('_JEXEC') or die();
 
 require_once (dirname(__FILE__).DS.'helper.php');
 
-$params->set('surface_measure', modJeaEmphasisHelper::getComponentParam('surface_measure'));
+// Load component language
+JFactory::getLanguage()->load('com_jea', JPATH_BASE.'/components/com_jea');
 
-$application =& JFactory::getApplication();
-// Register params to be retrieved into modJeaEmphasisHelper
-$application->set('mod_jea_emphasis_params', $params);
+// Declare JEA helpers
+JHtml::addIncludePath(JPATH_BASE.'/components/com_jea/helpers/html');
 
-$rows = modJeaEmphasisHelper::getList();
+$rows = modJeaEmphasisHelper::getItems($params);
 
 require(JModuleHelper::getLayoutPath('mod_jea_emphasis'));
 

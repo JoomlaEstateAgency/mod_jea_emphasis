@@ -1,41 +1,40 @@
-.clr {
-	clear: both;
-	height:0px;
-}
-
 /*format list */
 
-dl.jea_mod_emphasis_item {
-	border-bottom: 1px dashed #b2b4bf;
-	padding-bottom: 1em;
+dl.mod-jea-emphasis {
+	padding:0;
+	margin: 0 0 1em 0;
 }
 
-dl.jea_mod_emphasis_item dt.jea_mod_emphasis_title {
-	clear: both;
-	margin-bottom: 0.7em;
-}
-
-dl.jea_mod_emphasis_item dt.jea_mod_emphasis_title strong {
-	font-size: 1.3em;
-}
-
-dl.jea_mod_emphasis_item dt.image {
-	/*float: left;*/
+dl.mod-jea-emphasis.horizontal {
+	width: 30%;
+	float: left;
 	margin-right: 1em;
+	height: 150px;
+	overflow: hidden;
 }
 
-dl.jea_mod_emphasis_item dt.image img {
-	border-color: #819d26;
+dl.mod-jea-emphasis dt {
+	clear: both;
+	padding: 0;
+	margin: 0 0 5px 0;
+	font-size: 1.2em;
 }
 
-dl.jea_mod_emphasis_item dd {
-	margin: 5px 0;
+dl.mod-jea-emphasis dd {
+	padding: 5px 0;
+	margin: 0;
+	overflow: hidden;
 }
 
-dl.jea_mod_emphasis_item span.slogan {
-	/*float: right;*/
-}
-
-dl.jea_mod_emphasis_item span.slogan strong {
+dl.mod-jea-emphasis strong.slogan {
 	color: red;
+}
+
+dl.mod-jea-emphasis a.image {
+	display: block;
+	margin-bottom: 5px;
+}
+
+dl.mod-jea-emphasis a.image img {
+	border: none;
 }
