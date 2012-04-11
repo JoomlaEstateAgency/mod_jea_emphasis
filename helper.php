@@ -43,6 +43,7 @@ class modJeaEmphasisHelper
         $query->join('LEFT', '#__jea_slogans AS s ON s.id = p.slogan_id');
 
         $query->where('p.published=1');
+        $query->where('p.language in ('.$db->quote(JFactory::getLanguage()->getTag()).','.$db->quote('*').')');
 
         switch($selection){
             case 'featured':
@@ -80,11 +81,63 @@ class modJeaEmphasisHelper
 
     public static function getPropertyRoute(&$row)
     {
+        static $menuItems;
 
-        $url = 'index.php?option=com_jea&view=properties' ;
-         
+        if ($menuItems === null){
+            $menuItems = array(
+                'both'    => 0,
+                'renting' => 0,
+                'selling' => 0
+            );
+            $app  = JFactory::getApplication();
+            $menu = $app->getMenu();
+            $items = $menu->getItems('component', 'com_jea');
+            $lang = JFactory::getLanguage()->getTag();
+            foreach ($items as $item) {
+                $layout = isset($item->query['layout']) ? $item->query['layout'] : 'default';
+                $view = isset($item->query['view']) ? $item->query['view'] : '';
 
-        $url .= '&id=' . intval( $row->id ) ;
+                if ($view == 'properties' && ($item->language == '*' || $item->language == $lang)) {
+
+                    if ($layout == 'search' || $layout == 'searchmap') {
+                        if (empty($menuItems['both'])) {
+                            $menuItems['both'] = $item->id;
+                        }
+                    }
+
+                    if ($layout == 'default') {
+
+                        $type = $item->params->get('filter_transaction_type');
+
+                        if ($type == 'SELLING' && empty($menuItems['selling'])) {
+
+                            $menuItems['selling'] = $item->id;
+
+                        } elseif ($type == 'RENTING' && empty($menuItems['renting'])) {
+
+                            $menuItems['renting'] = $item->id;
+
+                        } elseif (empty($menuItems['both'])) {
+
+                            $menuItems['both'] = $item->id;
+                        }
+                    }
+                }
+            }
+        }
+
+
+        $slug = $row->alias ? ($row->id . ':' . $row->alias) : $row->id;
+
+        $url = 'index.php?option=com_jea&view=properties&id=' . $slug;
+
+        if (!empty($menuItems['selling']) && $row->transaction_type == 'SELLING') {
+            $url .= '&Itemid=' . $menuItems['selling'];
+        } elseif (!empty($menuItems['renting']) && $row->transaction_type == 'RENTING') {
+            $url .= '&Itemid=' . $menuItems['renting'];
+        } elseif (!empty($menuItems['both'])) {
+            $url .= '&Itemid=' . $menuItems['both'];
+        }
 
         return JRoute::_($url);
     }
