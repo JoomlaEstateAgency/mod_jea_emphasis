@@ -129,7 +129,7 @@ class modJeaEmphasisHelper
 
         $slug = $row->alias ? ($row->id . ':' . $row->alias) : $row->id;
 
-        $url = 'index.php?option=com_jea&view=properties&id=' . $slug;
+        $url = 'index.php?option=com_jea&view=property&id=' . $slug;
 
         if (!empty($menuItems['selling']) && $row->transaction_type == 'SELLING') {
             $url .= '&Itemid=' . $menuItems['selling'];
