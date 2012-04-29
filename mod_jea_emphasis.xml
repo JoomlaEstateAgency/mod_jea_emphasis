@@ -23,6 +23,12 @@
 		<language tag="fr-FR">fr-FR.mod_jea_emphasis.sys.ini</language>
 	</languages>
 
+	<!-- Updateserver definition -->
+	<updateservers>
+		<!-- Note: No spaces or linebreaks allowed between the server tags -->
+		<server type="extension" priority="1" name="JEA Emphasis Update Site">http://jea.sphilip.com/update/mod_jea_emphasis.xml</server>
+	</updateservers>
+
 	<config>
 		<fields name="params">
 			<fieldset name="basic">
@@ -73,7 +79,6 @@
 					label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL" 
 					description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC" />
 			</fieldset>
-			>
 		</fields>
 	</config>
 </extension>
