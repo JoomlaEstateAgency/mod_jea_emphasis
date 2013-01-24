@@ -24,8 +24,9 @@ class mod_jea_emphasisInstallerScript
         $jea = JFactory::getXML(JPATH_ROOT.'/administrator/components/com_jea/jea.xml');
         if ((float) $jea->version < 2.2) {
             JError::raiseWarning(500, 'JEA version must be >= 2.2. Please upgrade before JEA component');
+            return false;
         }
-        return false;
+        return true;
     }
 
 
