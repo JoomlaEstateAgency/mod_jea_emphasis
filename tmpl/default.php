@@ -10,7 +10,7 @@
 // no direct access
 defined('_JEXEC') or die();
 
-JHTML::stylesheet('mod_jea_emphasis.css', 'modules/mod_jea_emphasis/');
+JHTML::stylesheet('modules/mod_jea_emphasis/mod_jea_emphasis.css');
 $charset = strtoupper(JFactory::getDocument()->getCharset());
 ?>
 

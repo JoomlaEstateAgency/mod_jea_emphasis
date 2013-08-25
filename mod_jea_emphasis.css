@@ -38,3 +38,7 @@ dl.mod-jea-emphasis a.image {
 dl.mod-jea-emphasis a.image img {
 	border: none;
 }
+
+dl.mod-jea-emphasis.vertical a.image {
+	display: block;
+}
