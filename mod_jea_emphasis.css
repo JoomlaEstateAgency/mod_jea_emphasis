@@ -1,5 +1,9 @@
 /*format list */
 
+.mod-jea-emphasis-container {
+	overflow: hidden;
+}
+
 dl.mod-jea-emphasis {
 	padding:0;
 	margin: 0 0 1em 0;
@@ -9,7 +13,7 @@ dl.mod-jea-emphasis.horizontal {
 	width: 30%;
 	float: left;
 	margin-right: 1em;
-	height: 150px;
+	height: 220px;
 	overflow: hidden;
 }
 
@@ -24,10 +28,17 @@ dl.mod-jea-emphasis dd {
 	padding: 5px 0;
 	margin: 0;
 	overflow: hidden;
+	position: relative;
 }
 
-dl.mod-jea-emphasis strong.slogan {
+dl.mod-jea-emphasis .slogan {
 	color: red;
+	background: #FFF;
+	padding: 2px;
+	position: absolute;
+	top: 0;
+	left: 5px;
+	border: 1px solid #ccc;
 }
 
 dl.mod-jea-emphasis a.image {

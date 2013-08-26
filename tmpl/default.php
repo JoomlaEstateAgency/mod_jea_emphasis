@@ -14,6 +14,7 @@ JHTML::stylesheet('modules/mod_jea_emphasis/mod_jea_emphasis.css');
 $charset = strtoupper(JFactory::getDocument()->getCharset());
 ?>
 
+<div class="mod-jea-emphasis-container">
 <?php foreach ($rows as $k => $row) : $url = modJeaEmphasisHelper::getPropertyRoute($row) ?>
 <dl class="mod-jea-emphasis<?php echo $params->get('moduleclass_sfx') ?> <?php echo $params->get('display_mode', 'vertical')?>">
   <dt>
@@ -66,3 +67,4 @@ $charset = strtoupper(JFactory::getDocument()->getCharset());
   <?php endif ?>
 </dl>
 <?php endforeach ?>
+</div>
