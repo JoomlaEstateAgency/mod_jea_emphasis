@@ -13,7 +13,7 @@ dl.mod-jea-emphasis.horizontal {
 	width: 30%;
 	float: left;
 	margin-right: 1em;
-	height: 220px;
+	min-height: 220px;
 	overflow: hidden;
 }
 
