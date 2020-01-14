@@ -2,12 +2,12 @@
 <extension type="module" version="2.5" method="upgrade">
 	<name>mod_jea_emphasis</name>
 	<author>Sylvain Philip</author>
-	<creationDate>04/2012</creationDate>
-	<copyright>(C) 2012 PHILIP Sylvain. All rights reserved.</copyright>
+	<creationDate>apr 2012</creationDate>
+	<copyright>(C) 2008 - 2012 PHILIP Sylvain. All rights reserved.</copyright>
 	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
 	<authorEmail>contact@sphilip.com</authorEmail>
 	<authorUrl>www.sphilip.com</authorUrl>
-	<version>2.2</version>
+	<version>2.3</version>
 	<description>MOD_JEA_EMPHASIS_DESCRIPTION</description>
 	<!-- Runs on install/uninstall/update -->
 	<scriptfile>script.php</scriptfile>
@@ -17,41 +17,62 @@
 		<folder>language</folder>
 		<folder>tmpl</folder>
 		<filename>helper.php</filename>
-		<filename>mod_jea_emphasis.css</filename>>
 	</files>
+	
+	<media destination="mod_jea_emphasis" folder="media" >
+		<folder>css</folder>
+	</media>
 
 	<!-- Updateserver definition -->
 	<updateservers>
 		<!-- Note: No spaces or linebreaks allowed between the server tags -->
-		<server type="extension" priority="1" name="JEA Emphasis Update Site">http://jea.sphilip.com/update/mod_jea_emphasis.xml</server>
+		<server type="extension" priority="1" name="JEA Emphasis update site">http://jea.sphilip.com/update/mod_jea_emphasis.xml</server>
 	</updateservers>
 
 	<config>
 		<fields name="params">
 			<fieldset name="basic">
-				<field name="selection" type="list" default="featured"
-					label="MOD_JEA_EMPHASIS_FIELD_SELECTION_LABEL" 
-					description="MOD_JEA_EMPHASIS_FIELD_SELECTION_DESC">
+				<field
+					name="selection"
+					type="list"
+					default="featured"
+					label="MOD_JEA_EMPHASIS_FIELD_SELECTION_LABEL"
+					description="MOD_JEA_EMPHASIS_FIELD_SELECTION_DESC"
+				>
 					<option value="featured">MOD_JEA_EMPHASIS_OPTION_FEATURED_PROPERTIES</option>
 					<option value="latest">MOD_JEA_EMPHASIS_OPTION_LATEST_PROPERTIES</option>
 					<option value="random">MOD_JEA_EMPHASIS_OPTION_RANDOM_PROPERTIES</option>
 				</field>
 
-				<field name="show_thumbnails" type="radio" default="1"
-					label="MOD_JEA_EMPHASIS_FIELD_SHOW_THUMBNAILS_LABEL">
+				<field
+					name="show_thumbnails"
+					type="radio"
+					default="1"
+					label="MOD_JEA_EMPHASIS_FIELD_SHOW_THUMBNAILS_LABEL"
+					class="btn-group btn-group-yesno"
+				>
 					<option value="0">JNO</option>
 					<option value="1">JYES</option>
 				</field>
 
-				<field name="show_details" type="radio" default="1"
-					label="MOD_JEA_EMPHASIS_FIELD_SHOW_DETAILS_LABEL">
+				<field
+					name="show_details"
+					type="radio"
+					default="1"
+					label="MOD_JEA_EMPHASIS_FIELD_SHOW_DETAILS_LABEL"
+					class="btn-group btn-group-yesno"
+				>
 					<option value="0">JNO</option>
 					<option value="1">JYES</option>
 				</field>
 
-				<field name="order_by" type="list" default="created"
-					label="MOD_JEA_EMPHASIS_FIELD_ORDER_BY_LABEL" 
-					description="MOD_JEA_EMPHASIS_FIELD_ORDER_BY_DESC">
+				<field
+					name="order_by"
+					type="list"
+					default="created"
+					label="MOD_JEA_EMPHASIS_FIELD_ORDER_BY_LABEL"
+					description="MOD_JEA_EMPHASIS_FIELD_ORDER_BY_DESC"
+				>
 					<option value="created">JGLOBAL_FIELD_CREATED_LABEL</option>
 					<option value="ordering">JFIELD_ORDERING_LABEL</option>
 					<option value="price">MOD_JEA_EMPHASIS_PRICE</option>
@@ -59,22 +80,40 @@
 					<option value="random">MOD_JEA_EMPHASIS_OPTION_RANDOM</option>
 				</field>
 
-				<field name="number_items" type="text" default="5"
-					label="MOD_JEA_EMPHASIS_FIELD_NUMBER_ITEMS_LIST_LABEL" 
-					description="MOD_JEA_EMPHASIS_FIELD_NUMBER_ITEMS_LIST_DESC" />
-				
-				<field name="display_mode" type="list" default="vertical"
-					label="MOD_JEA_EMPHASIS_FIELD_DISPLAY_MODE_LABEL">
+				<field
+					name="number_items"
+					type="text"
+					default="5"
+					label="MOD_JEA_EMPHASIS_FIELD_NUMBER_ITEMS_LIST_LABEL"
+					description="MOD_JEA_EMPHASIS_FIELD_NUMBER_ITEMS_LIST_DESC"
+				/>
+
+				<field
+					name="display_mode"
+					type="list"
+					default="vertical"
+					label="MOD_JEA_EMPHASIS_FIELD_DISPLAY_MODE_LABEL"
+				>
 					<option value="vertical">MOD_JEA_EMPHASIS_OPTION_VERTICAL</option>
 					<option value="horizontal">MOD_JEA_EMPHASIS_OPTION_HORIZONTAL</option>
 				</field>
-
 			</fieldset>
 
-			<fieldset name="advanced">>
-				<field name="moduleclass_sfx" type="text" default="" 
-					label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL" 
-					description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC" />
+			<fieldset name="advanced">
+				<field
+					name="layout"
+					type="modulelayout"
+					label="JFIELD_ALT_LAYOUT_LABEL"
+					description="JFIELD_ALT_MODULE_LAYOUT_DESC"
+				/>
+
+				<field
+					name="moduleclass_sfx"
+					type="text"
+					default=""
+					label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL"
+					description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC"
+				/>
 			</fieldset>
 		</fields>
 	</config>

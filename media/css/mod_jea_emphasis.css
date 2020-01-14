@@ -1,33 +1,29 @@
-/*format list */
 
 .mod-jea-emphasis-container {
-	overflow: hidden;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	
 }
 
 dl.mod-jea-emphasis {
-	padding:0;
+	padding: 0;
 	margin: 0 0 1em 0;
 }
 
 dl.mod-jea-emphasis.horizontal {
-	width: 30%;
-	float: left;
-	margin-right: 1em;
-	min-height: 220px;
-	overflow: hidden;
+	flex-basis: 30%;
 }
 
 dl.mod-jea-emphasis dt {
-	clear: both;
 	padding: 0;
-	margin: 0 0 5px 0;
+	margin: 0 0 0.5em 0;
 	font-size: 1.2em;
 }
 
 dl.mod-jea-emphasis dd {
-	padding: 5px 0;
+	padding: 0.5em 0;
 	margin: 0;
-	overflow: hidden;
 	position: relative;
 }
 
@@ -43,11 +39,12 @@ dl.mod-jea-emphasis .slogan {
 
 dl.mod-jea-emphasis a.image {
 	display: block;
-	margin-bottom: 5px;
+	margin-bottom: 0.5em;
 }
 
 dl.mod-jea-emphasis a.image img {
 	border: none;
+	max-width: 100%;
 }
 
 dl.mod-jea-emphasis.vertical a.image {

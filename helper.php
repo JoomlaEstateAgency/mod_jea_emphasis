@@ -1,191 +1,226 @@
 <?php
 /**
- * @version     $Id$
  * @package     Joomla.Site
- * @subpackage  mod_jea_emphasiis
- * @copyright   Copyright (C) 2012 PHILIP Sylvain. All rights reserved.
+ * @subpackage  mod_jea_emphasis
+ * @copyright   Copyright (C) 2008 - 2020 PHILIP Sylvain. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-// no direct access
-defined('_JEXEC') or die();
+defined('_JEXEC') or die;
 
+/**
+ * Helper class for mod_jea_emphasis
+ *
+ */
 class modJeaEmphasisHelper
 {
+	/**
+	 * Retrieve a list of properties
+	 *
+	 * @param  Joomla\Registry\Registry  $params  The module configuration
+	 *
+	 * @return null|stdClass[] Db rows of properties
+	 */
+	public static function getItems($params)
+	{
+		$orderby = $params->get('order_by', 'created');
+		$selection = $params->get('selection', 'featured');
+		$limit = (int) $params->get('number_items', 5);
 
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
 
-    public static function getItems(&$params)
-    {
-        $orderby = $params->get('order_by', 'created');
-        $selection = $params->get('selection', 'featured');
-        $limit = (int) $params->get('number_items', 5);
+		$query->select('p.*');
+		$query->from('#__jea_properties AS p');
 
-        $db     = JFactory::getDbo();
-        $query  = $db->getQuery(true);
+		// Join properties types
+		$query->select('t.value AS `type`');
+		$query->join('LEFT', '#__jea_types AS t ON t.id = p.type_id');
 
-        $query->select('p.*');
-        $query->from('#__jea_properties AS p');
+		// Join departments
+		$query->select('d.value AS department');
+		$query->join('LEFT', '#__jea_departments AS d ON d.id = p.department_id');
 
-        // Join properties types
-        $query->select('t.value AS `type`');
-        $query->join('LEFT', '#__jea_types AS t ON t.id = p.type_id');
+		// Join towns
+		$query->select('town.value AS town');
+		$query->join('LEFT', '#__jea_towns AS town ON town.id = p.town_id');
 
-        // Join departments
-        $query->select('d.value AS department');
-        $query->join('LEFT', '#__jea_departments AS d ON d.id = p.department_id');
+		// Join slogans
+		$query->select('s.value AS slogan');
+		$query->join('LEFT', '#__jea_slogans AS s ON s.id = p.slogan_id');
 
-        // Join towns
-        $query->select('town.value AS town');
-        $query->join('LEFT', '#__jea_towns AS town ON town.id = p.town_id');
+		$query->where('p.published=1');
+		$query->where('p.language in (' . $db->quote(JFactory::getLanguage()->getTag()) . ',' . $db->quote('*') . ')');
 
-        // Join slogans
-        $query->select('s.value AS slogan');
-        $query->join('LEFT', '#__jea_slogans AS s ON s.id = p.slogan_id');
+		// Filter by access level
+		$user = JFactory::getUser();
+		$groups = implode(',', $user->getAuthorisedViewLevels());
+		$query->where('p.access IN (' . $groups . ')');
 
-        $query->where('p.published=1');
-        $query->where('p.language in ('.$db->quote(JFactory::getLanguage()->getTag()).','.$db->quote('*').')');
+		// Filter by start and end dates.
+		$nullDate = $db->Quote($db->getNullDate());
+		$nowDate = $db->Quote(JFactory::getDate()->toSql());
 
-        // Filter by access level
-        $user = JFactory::getUser();
-        $groups = implode(',', $user->getAuthorisedViewLevels());
-        $query->where('p.access IN ('.$groups.')');
+		$query->where('(p.publish_up = ' . $nullDate . ' OR p.publish_up <= ' . $nowDate . ')');
+		$query->where('(p.publish_down = ' . $nullDate . ' OR p.publish_down >= ' . $nowDate . ')');
 
-        // Filter by start and end dates.
-        $nullDate = $db->Quote($db->getNullDate());
-        $nowDate  = $db->Quote(JFactory::getDate()->toSql());
+		switch ($selection)
+		{
+			case 'featured':
+				$query->where('p.featured=1');
+				break;
+			case 'latest':
+				$orderby = 'created';
+				break;
+			case 'random':
+				$orderby = 'random';
+				break;
+		}
 
-        $query->where('(p.publish_up = '.$nullDate.' OR p.publish_up <= '.$nowDate.')');
-        $query->where('(p.publish_down = '.$nullDate.' OR p.publish_down >= '.$nowDate.')');
+		switch ($orderby)
+		{
+			case 'created':
+				$query->order('p.created DESC');
+				break;
+			case 'ordering':
+				$query->order('p.ordering ASC');
+				break;
+			case 'price':
+				$query->order('p.price ASC');
+				break;
+			case 'hits':
+				$query->order('p.hits DESC');
+				break;
+			case 'random':
+				$query->order('RAND()');
+				break;
+		}
 
-        switch($selection){
-            case 'featured':
-                $query->where('p.featured=1');
-                break;
-            case 'latest':
-                $orderby = 'created';
-                break;
-            case 'random':
-                $orderby = 'random';
-                break;
-        }
+		$db->setQuery($query, 0, $limit);
 
-        switch($orderby){
-            case 'created':
-                $query->order('p.created DESC');
-                break;
-            case 'ordering':
-                $query->order('p.ordering ASC');
-                break;
-            case 'price':
-                $query->order('p.price ASC');
-                break;
-            case 'hits':
-                $query->order('p.hits DESC');
-                break;
-            case 'random':
-                $query->order('RAND()');
-                break;
-        }
+		return $db->loadObjectList();
+	}
 
-        $db->setQuery($query, 0, $limit);
-        return $db->loadObjectList();
-    }
+	/**
+	 * Get the route url for a property
+	 *
+	 * @param  stdClass  $row  The property db record
+	 *
+	 * @return string The property route
+	 */
+	public static function getPropertyRoute($row)
+	{
+		static $menuItems;
 
-    public static function getPropertyRoute(&$row)
-    {
-        static $menuItems;
+		if ($menuItems === null)
+		{
+			$menuItems = array(
+				'both' => 0,
+				'renting' => 0,
+				'selling' => 0
+			);
 
-        if ($menuItems === null){
-            $menuItems = array(
-                'both'    => 0,
-                'renting' => 0,
-                'selling' => 0
-            );
-            $app  = JFactory::getApplication();
-            $menu = $app->getMenu();
-            $items = $menu->getItems('component', 'com_jea');
-            $lang = JFactory::getLanguage()->getTag();
-            $user = JFactory::getUser();
-            $viewLevels = $user->getAuthorisedViewLevels();
+			$app = JFactory::getApplication();
+			$menu = $app->getMenu();
+			$items = $menu->getItems('component', 'com_jea');
+			$lang = JFactory::getLanguage()->getTag();
+			$user = JFactory::getUser();
+			$viewLevels = $user->getAuthorisedViewLevels();
 
-            foreach ($items as $item) {
-                if (!in_array($item->access, $viewLevels)) {
-                    continue;
-                }
-                $layout = isset($item->query['layout']) ? $item->query['layout'] : 'default';
-                $view = isset($item->query['view']) ? $item->query['view'] : '';
+			foreach ($items as $item)
+			{
+				if (!in_array($item->access, $viewLevels))
+				{
+					continue;
+				}
 
-                if ($view == 'properties' && ($item->language == '*' || $item->language == $lang)) {
+				$layout = isset($item->query['layout']) ? $item->query['layout'] : 'default';
+				$view = isset($item->query['view']) ? $item->query['view'] : '';
 
-                    if ($layout == 'search' || $layout == 'searchmap') {
-                        if (empty($menuItems['both'])) {
-                            $menuItems['both'] = $item->id;
-                        }
-                    }
+				if ($view == 'properties' && ($item->language == '*' || $item->language == $lang))
+				{
+					if ($layout == 'search' || $layout == 'searchmap')
+					{
+						if (empty($menuItems['both']))
+						{
+							$menuItems['both'] = $item->id;
+						}
+					}
 
-                    if ($layout == 'default') {
+					if ($layout == 'default')
+					{
+						$type = $item->params->get('filter_transaction_type');
 
-                        $type = $item->params->get('filter_transaction_type');
+						if ($type == 'SELLING' && empty($menuItems['selling']))
+						{
+							$menuItems['selling'] = $item->id;
+						}
+						elseif ($type == 'RENTING' && empty($menuItems['renting']))
+						{
+							$menuItems['renting'] = $item->id;
+						}
+						elseif (empty($menuItems['both']))
+						{
+							$menuItems['both'] = $item->id;
+						}
+					}
+				}
+			}
+		}
 
-                        if ($type == 'SELLING' && empty($menuItems['selling'])) {
+		$slug = $row->alias ? ($row->id . ':' . $row->alias) : $row->id;
 
-                            $menuItems['selling'] = $item->id;
+		$url = 'index.php?option=com_jea&view=property&id=' . $slug;
 
-                        } elseif ($type == 'RENTING' && empty($menuItems['renting'])) {
+		if (!empty($menuItems['selling']) && $row->transaction_type == 'SELLING')
+		{
+			$url .= '&Itemid=' . $menuItems['selling'];
+		}
+		elseif (!empty($menuItems['renting']) && $row->transaction_type == 'RENTING')
+		{
+			$url .= '&Itemid=' . $menuItems['renting'];
+		}
+		elseif (!empty($menuItems['both']))
+		{
+			$url .= '&Itemid=' . $menuItems['both'];
+		}
 
-                            $menuItems['renting'] = $item->id;
+		return JRoute::_($url);
+	}
 
-                        } elseif (empty($menuItems['both'])) {
+	/**
+	 * Get the main image url of a property
+	 *
+	 * @param  stdClass  $row  The property db record
+	 *
+	 * @return string The main image url of the given property
+	 */
+	public static function getItemImg (&$row)
+	{
+		$images = json_decode($row->images);
+		$image = null;
 
-                            $menuItems['both'] = $item->id;
-                        }
-                    }
-                }
-            }
-        }
+		if (!empty($images) && is_array($images))
+		{
+			$image = array_shift($images);
+			$imagePath = JPATH_ROOT . '/images/com_jea';
 
+			if (file_exists($imagePath . '/thumb-min/' . $row->id . '-' . $image->name))
+			{
+				// If the thumbnail already exists, display it directly
+				$baseURL = JURI::root(true);
 
-        $slug = $row->alias ? ($row->id . ':' . $row->alias) : $row->id;
+				return $baseURL . '/images/com_jea/thumb-min/' . $row->id . '-' . $image->name;
+			}
+			elseif (file_exists($imagePath . '/images/' . $row->id . '/' . $image->name))
+			{
+				// If the thumbnail doesn't exist, generate it and output it on the fly
+				$url = 'index.php?option=com_jea&task=thumbnail.create&size=min&id=' . $row->id . '&image=' . $image->name;
 
-        $url = 'index.php?option=com_jea&view=property&id=' . $slug;
+				return JRoute::_($url);
+			}
+		}
 
-        if (!empty($menuItems['selling']) && $row->transaction_type == 'SELLING') {
-            $url .= '&Itemid=' . $menuItems['selling'];
-        } elseif (!empty($menuItems['renting']) && $row->transaction_type == 'RENTING') {
-            $url .= '&Itemid=' . $menuItems['renting'];
-        } elseif (!empty($menuItems['both'])) {
-            $url .= '&Itemid=' . $menuItems['both'];
-        }
-
-        return JRoute::_($url);
-    }
-
-    public static function getItemImg(&$row)
-    {
-        $images = json_decode($row->images);
-        $image  = null;
-
-        if (!empty($images) && is_array($images)) {
-
-            $image = array_shift($images);
-            $imagePath = JPATH_ROOT . '/images/com_jea';
-
-            if (file_exists($imagePath . '/thumb-min/'.$row->id.'-'.$image->name)) {
-                // If the thumbnail already exists, display it directly
-                $baseURL = JURI::root(true);
-                return $baseURL.'/images/com_jea/thumb-min/'.$row->id.'-'.$image->name;
-
-            } elseif (file_exists($imagePath . '/images/' . $row->id.'/'.$image->name)) {
-                // If the thumbnail doesn't exist, generate it and output it on the fly
-                $url = 'index.php?option=com_jea&task=thumbnail.create&size=min&id='
-                . $row->id .'&image='.$image->name;
-
-                return JRoute::_($url);
-            }
-        }
-
-        return '';
-    }
-
-
+		return '';
+	}
 }
