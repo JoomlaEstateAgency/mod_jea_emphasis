@@ -8,6 +8,13 @@
 
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Router\Route;
+use Joomla\Registry\Registry;
+use Joomla\Database\DatabaseInterface;
+use Joomla\CMS\Application\SiteApplication;
+
 /**
  * Helper class for mod_jea_emphasis
  *
@@ -17,17 +24,20 @@ class modJeaEmphasisHelper
 	/**
 	 * Retrieve a list of properties
 	 *
-	 * @param  Joomla\Registry\Registry  $params  The module configuration
+	 * @param  Registry  $params  The module configuration
 	 *
 	 * @return null|stdClass[] Db rows of properties
 	 */
-	public static function getItems($params)
+	public static function getItems(Registry $params)
 	{
+		$app = Factory::getApplication();
+		assert($app instanceof SiteApplication);
+
 		$orderby = $params->get('order_by', 'created');
 		$selection = $params->get('selection', 'featured');
 		$limit = (int) $params->get('number_items', 5);
 
-		$db = JFactory::getDbo();
+		$db = Factory::getContainer()->get(DatabaseInterface::class);
 		$query = $db->getQuery(true);
 
 		$query->select('p.*');
@@ -50,16 +60,16 @@ class modJeaEmphasisHelper
 		$query->join('LEFT', '#__jea_slogans AS s ON s.id = p.slogan_id');
 
 		$query->where('p.published=1');
-		$query->where('p.language in (' . $db->quote(JFactory::getLanguage()->getTag()) . ',' . $db->quote('*') . ')');
+		$query->where('p.language in (' . $db->quote($app->getLanguage()->getTag()) . ',' . $db->quote('*') . ')');
 
 		// Filter by access level
-		$user = JFactory::getUser();
+		$user = $app->getIdentity();
 		$groups = implode(',', $user->getAuthorisedViewLevels());
 		$query->where('p.access IN (' . $groups . ')');
 
 		// Filter by start and end dates.
 		$nullDate = $db->Quote($db->getNullDate());
-		$nowDate = $db->Quote(JFactory::getDate()->toSql());
+		$nowDate = $db->Quote(Factory::getDate()->toSql());
 
 		$query->where('(p.publish_up = ' . $nullDate . ' OR p.publish_up <= ' . $nowDate . ')');
 		$query->where('(p.publish_down = ' . $nullDate . ' OR p.publish_down >= ' . $nowDate . ')');
@@ -120,11 +130,12 @@ class modJeaEmphasisHelper
 				'selling' => 0
 			);
 
-			$app = JFactory::getApplication();
+			$app = Factory::getApplication();
+			assert($app instanceof SiteApplication);
 			$menu = $app->getMenu();
 			$items = $menu->getItems('component', 'com_jea');
-			$lang = JFactory::getLanguage()->getTag();
-			$user = JFactory::getUser();
+			$lang = $app->getLanguage()->getTag();
+			$user = $app->getIdentity();
 			$viewLevels = $user->getAuthorisedViewLevels();
 
 			foreach ($items as $item)
@@ -149,7 +160,7 @@ class modJeaEmphasisHelper
 
 					if ($layout == 'default')
 					{
-						$type = $item->params->get('filter_transaction_type');
+						$type = $item->getParams()->get('filter_transaction_type');
 
 						if ($type == 'SELLING' && empty($menuItems['selling']))
 						{
@@ -185,7 +196,7 @@ class modJeaEmphasisHelper
 			$url .= '&Itemid=' . $menuItems['both'];
 		}
 
-		return JRoute::_($url);
+		return Route::_($url);
 	}
 
 	/**
@@ -208,7 +219,7 @@ class modJeaEmphasisHelper
 			if (file_exists($imagePath . '/thumb-min/' . $row->id . '-' . $image->name))
 			{
 				// If the thumbnail already exists, display it directly
-				$baseURL = JURI::root(true);
+				$baseURL = Uri::root(true);
 
 				return $baseURL . '/images/com_jea/thumb-min/' . $row->id . '-' . $image->name;
 			}
@@ -217,7 +228,7 @@ class modJeaEmphasisHelper
 				// If the thumbnail doesn't exist, generate it and output it on the fly
 				$url = 'index.php?option=com_jea&task=thumbnail.create&size=min&id=' . $row->id . '&image=' . $image->name;
 
-				return JRoute::_($url);
+				return Route::_($url);
 			}
 		}
 
